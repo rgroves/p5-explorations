@@ -17,7 +17,7 @@ export default ($) => {
 
   $.draw = () => {
     if (circleCount > 1000) {
-      $.clear();
+      $.background(0);
       circleCount = 0;
     }
 

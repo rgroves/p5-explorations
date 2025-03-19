@@ -18,7 +18,7 @@ export default ($) => {
     if (circleCount > 1000) {
       if (!tid) {
         tid = setTimeout(() => {
-          $.clear();
+          $.background(0);
           circleCount = 0;
           tid = null;
         }, 1500);
