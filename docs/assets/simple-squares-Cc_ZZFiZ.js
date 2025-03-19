@@ -1,0 +1,2 @@
+const r=e=>{let s=0,a=e.mouseX,u=e.mouseY;e.setup=()=>{e.createCanvas(400,400).parent("app"),e.background(0),e.fill(255),e.textAlign(e.CENTER,e.CENTER),e.text(`Move mouse to draw squares.
+After 1000 squares canvas will erase after breif pause.`,e.width/2,e.height/2)};let t=null;e.draw=()=>{if(s>1e3){t||(t=setTimeout(()=>{e.clear(),s=0,t=null},1500));return}(a!==e.mouseX||u!==e.mouseY)&&(e.square(e.mouseX,e.mouseY,50),s++,a=e.mouseX,u=e.mouseY)}};export{r as default};

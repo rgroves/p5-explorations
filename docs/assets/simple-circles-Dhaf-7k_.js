@@ -1,0 +1,2 @@
+const a=e=>{e.setup=()=>{const t=e.createCanvas(400,400);t.parent("app"),t.canvas.addEventListener("contextmenu",s=>{s.preventDefault()}),e.background(0),e.fill(255),e.textAlign(e.CENTER,e.CENTER),e.text(`Right-Click to draw circles
+Left-Click to erase canvas`,e.width/2,e.height/2)},e.draw=()=>{e.mouseIsPressed&&(e.mouseButton===e.LEFT?e.circle(e.mouseX,e.mouseY,50):e.mouseButton===e.RIGHT&&e.background(0))}};export{a as default};
