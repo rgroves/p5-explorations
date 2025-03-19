@@ -2,6 +2,7 @@ import p5 from 'p5/lib/p5';
 
 class SketchLoader {
   #currentSketch;
+  #currentSketchUid;
   #pathExclusions;
   #sketchImportsMap;
 
@@ -9,6 +10,7 @@ class SketchLoader {
     const { dynamicImportsMap, pathPrefix } = sketchConfig;
 
     this.#currentSketch = null;
+    this.#currentSketchUid = null;
     this.#pathExclusions = [...pathPrefix.split('/')];
     this.#sketchImportsMap = dynamicImportsMap;
 
@@ -47,15 +49,21 @@ class SketchLoader {
     });
   }
 
-  async #load(filepath) {
+  async #load(uid, filepath) {
     try {
+      if (this.#currentSketch && this.#currentSketchUid === uid) {
+        return;
+      }
+
       const module = await this.#sketchImportsMap[filepath]();
       const sketch = module.default;
 
       if (this.#currentSketch) {
         this.#currentSketch.remove();
+        this.#currentSketch = null;
       }
 
+      this.#currentSketchUid = uid;
       this.#currentSketch = new p5(sketch);
     } catch (err) {
       console.error(err);
@@ -100,8 +108,8 @@ class SketchLoader {
     this.#_renderMenu(
       this.menuLevels,
       menuContainerElement,
-      (filepath) => {
-        this.#load(filepath);
+      (uid, filepath) => {
+        this.#load(uid, filepath);
       }
     );
   }

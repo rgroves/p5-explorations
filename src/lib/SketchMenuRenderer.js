@@ -17,7 +17,7 @@ class SketchMenuHtmlDetailsTreeRenderer {
         listItem.addEventListener(
           'click',
           () => {
-            clickHandler(sketch.filepath);
+            clickHandler(sketch.sketchUid, sketch.filepath);
           }
         );
         list.appendChild(listItem);
