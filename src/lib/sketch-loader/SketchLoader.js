@@ -14,8 +14,8 @@ class SketchLoader {
     this.#pathExclusions = [...pathPrefix.split('/')];
     this.#sketchImportsMap = dynamicImportsMap;
 
-    this.menuLevels = new Map();
-    this.menuLevels.set("/", { sketches: [], subMenu: new Map() });
+    this.menuLevelMap = new Map();
+    this.menuLevelMap.set("/", { sketches: [], subMenu: new Map(), levelNbr: 0 });
 
     Object.keys(this.#sketchImportsMap).forEach(filepath => {
       const pathLevels = filepath.split('/').filter(
@@ -31,14 +31,14 @@ class SketchLoader {
     const sketchUid = nameNormalizer(pathLevels.join("_"));
     const menuItemName = nameNormalizer(pathLevels[pathLevels.length - 1]).replace(/-/g, ' ');
 
-    let targetMenuLevel = this.menuLevels.get("/");
+    let targetMenuLevel = this.menuLevelMap.get("/");
 
     pathLevels.forEach((level, index) => {
       const isDirectoryLevel = index < (pathLevels.length - 1);
 
       if (isDirectoryLevel) {
         if (!targetMenuLevel.subMenu.has(level)) {
-          const newLevel = { sketches: [], subMenu: new Map() };
+          const newLevel = { sketches: [], subMenu: new Map(), levelNbr: index + 1 };
           targetMenuLevel.subMenu.set(level, newLevel);
         }
 
@@ -74,43 +74,18 @@ class SketchLoader {
     this.menuRenderer = renderer;
   }
 
-  #_renderMenu(menuLevel, element, clickHandler) {
-    let curElement;
-
-    menuLevel.forEach((levelMeta, level) => {
-      curElement = this.menuRenderer.onNewMenuLevel(
-        level,
-        levelMeta.sketches.map(sketch => {
-          return {
-            sketchUid: sketch.sketchUid,
-            filepath: sketch.filepath,
-            menuItemName: sketch.menuItemName
-          };
-        }),
-        clickHandler
-      );
-
-      if (levelMeta.subMenu.size > 0) {
-        this.#_renderMenu(levelMeta.subMenu, curElement, clickHandler);
-      }
-
-      element.appendChild(curElement);
-    });
-
-  }
-
   renderMenu(menuContainerElement) {
     if (!this.menuRenderer) {
       console.error("No menu renderer registered.");
       return;
     }
 
-    this.#_renderMenu(
-      this.menuLevels,
+    this.menuRenderer.renderMenu(
       menuContainerElement,
-      (uid, filepath) => {
+      this.menuLevelMap,
+      ((uid, filepath) => {
         this.#load(uid, filepath);
-      }
+      }).bind(this)
     );
   }
 }

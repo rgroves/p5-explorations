@@ -1,6 +1,4 @@
 export default ($) => {
-  let circleCount = 0;
-
   $.setup = () => {
     const p5Canvas = $.createCanvas(400, 400);
     p5Canvas.parent('app');
@@ -16,11 +14,6 @@ export default ($) => {
   }
 
   $.draw = () => {
-    if (circleCount > 1000) {
-      $.clear();
-      circleCount = 0;
-    }
-
     if ($.mouseIsPressed) {
       if ($.mouseButton === $.LEFT) {
         $.circle($.mouseX, $.mouseY, 50);

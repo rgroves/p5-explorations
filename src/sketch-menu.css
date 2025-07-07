@@ -1,0 +1,136 @@
+body:has(#sketch-menu-container .sketch-menu-popover:popover-open) {
+  /* When a sketch menu popover is open... */
+  /* ...prevent clicking anything clickable under the sketch menu popover. */
+  pointer-events: none;
+  /* ...hide the sketch canvas. */
+  & #app > canvas {
+    display: none;
+  }
+}
+
+#sketch-menu-container {
+  --top-menu-background: #888888;
+  --top-menu-header-background: rgba(225, 225, 225, 1);
+  --top-menu-header-color: rgb(50, 50, 50);
+  --button-background: #000;
+  --button-background-hover: #f0f0f0;
+  --button-color-hover: #000;
+  --button-background-active: #d0d0d0;
+  --button-background-focus: #c0c0c0;
+
+  display: flex;
+  flex-direction: column;
+  place-items: flex-start;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 16px;
+
+  &:has(:popover-open) {
+    & > button:first-of-type {
+      /* Hide the primary sketch menu button when menu is open. */
+      visibility: hidden;
+    }
+  }
+
+  .sketch-menu-popover:popover-open:not(:has(:popover-open)) {
+    background-color: var(--top-menu-background);
+
+    /* ensure clicks are registered on the top-most sketch menu popover */
+    pointer-events: all;
+  }
+
+  .sketch-menu-popover:popover-open::backdrop {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: grayscale(40%) blur(2px);
+  }
+
+  .sketch-menu-popover:popover-open {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: max-content;
+    padding: 0;
+  }
+
+  & .sketch-menu-header {
+    display: flex;
+    background: var(--top-menu-header-background);
+    color: var(--top-menu-header-color);
+    text-transform: lowercase;
+  }
+
+  & .sketch-menu-label {
+    padding: 0 12px;
+    align-self: center;
+    flex-grow: 1;
+    font-size: 1.2em;
+    font-style: italic;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  & .menu-prev-btn::before {
+    display: block;
+    content: "\ab";
+    font-size: 1em;
+    position: relative;
+    top: -1px;
+    line-height: 16px;
+    max-width: 16px;
+    min-width: 16px;
+    font-size: 1.5em;
+  }
+
+  & .menu-close-btn::before {
+    display: block;
+    content: "\d7";
+    line-height: 16px;
+    max-width: 16px;
+    font-size: 1.75em;
+    border: none;
+  }
+
+  & .menu-btn {
+    padding: 12px;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: left;
+    text-transform: lowercase;
+
+    background-color: var(--top-menu-header-background);
+    border: none;
+    color: inherit;
+    flex-shrink: 0;
+  }
+
+  & .menu-btn {
+    background: var(--button-background);
+    border: 5px solid transparent;
+
+    &:hover,
+    &:focus {
+      color: var(--button-color-hover);
+      font-weight: bolder;
+    }
+  }
+
+  & .menu-prev-btn,
+  & .menu-close-btn {
+    background-color: transparent;
+    border: 5px inset transparent;
+  }
+
+  & .menu-btn:hover,
+  & .menu-btn:focus {
+    border: 5px solid white;
+    color: inherit;
+  }
+
+  & .sketch-menu-body {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    max-width: 45ch;
+    max-height: 50vh;
+    text-wrap: wrap pretty;
+  }
+}
